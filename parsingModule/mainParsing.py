@@ -3,6 +3,8 @@ from fake_useragent import UserAgent
 from loader import smartagent_meta
 from loader import card_states
 import json
+import os
+import time
 
 class SmartAgentClient:
     phpsessionid = ""
@@ -95,7 +97,7 @@ class SmartAgentClient:
         return streets_and_stations_dict
 
 
-    def get_all_cards(self, sell_or_arend: bool, price_from: str = "", price_to: str = "", streets_or_stations:tuple = "", user_id:int = 0) -> list:
+    def get_all_cards(self, sell_or_arend: bool, price_from: str = "", price_to: str = "", streets_or_stations:tuple = "", user_id:int = 0, rooms = []) -> list:
         """
         Получение списка любой недвижимости\n
         streets_or_stations=('Москва г, Кандинского ул', get_streets_and_stations_dict(street: str))
@@ -130,6 +132,10 @@ class SmartAgentClient:
         if streets_or_stations != "" and streets_or_stations[0] in streets_or_stations[1]["stations"].keys():
             self.data["stations[0]"] = streets_or_stations[1]["stations"][streets_or_stations[0]]
 
+        if len(rooms) != 0:
+            for id, room in enumerate(rooms):
+                self.data[f"rooms[{id}]"] = room 
+
         self.data["price[from]"] = price_from
         self.data["price[to]"] = price_to
         #print(self.data)
@@ -141,36 +147,98 @@ class SmartAgentClient:
 
         all_cards = list() #Список со всеми объявлениями
         card_dict = dict() #Содержимое all_cards
+        
         for card in cards_dict["payload"]["rows"]:
+            
+            i = 0
+            images = []
+            card_dict = {}
             if "Земля" not in card.get("caption"):
-                card_dict["name"] = f"{card.get('caption')}, {card.get('total_area')}м^2, {card.get('floor')}/{card.get('floors')} эт." #TODO продолжить наполнение, затем конкретный поиск
+                card_dict["name"] = f"{card.get('caption')}, {card.get('total_area')}м², {card.get('floor')}/{card.get('floors')} эт." #TODO продолжить наполнение, затем конкретный поиск
                 card_dict["living_area"] = card.get("living_area")
                 card_dict["kitchen_area"] = card.get("kitchen_area")
             else:
                 card_dict["name"] = f"{card.get('caption')}, {card.get('land_area')} сот."
             card_dict["price"] = card["price"].get("RUB")
-            if "Земля" not in card.get("caption"):
+            if "Земля" not in card.get("caption") and "Доля" not in card.get("caption"):
                 card_dict["area_price"] = card["price"]["area"].get("RUB")
             card_dict["id"] = card.get("id")
             card_dict["metro"] = {
                 "name":card.get("metro_station"),
                 "lenght":card.get("metro_distance")
             }
+            card_dict["date"] = card["date"].get("date")
             card_dict["address_area"] = card.get("address_area")
             card_dict["address_quick"] = card.get("address_quick")
-            #card_dict["description"] = card.get("description") #TODO убрать комментарий
+            card_dict["description"] = card.get("description") if 'Объект имеет статус "Эксклюзивный источник"' not in card.get("description") else "Информация недоступна" #TODO убрать комментарий
             card_dict["phone"] = get_phone(card_dict.get("id"))
+            try: #Проверка на доступность фото
+                if card["images"][0].get("blured"):
+                    print("!")
+                    images.append("No_photo.jpg")
+                    card_dict["images"] = images
+                    all_cards.append(card_dict)
+                    continue
 
-                #TODO выгрузка всех фото с айди пользователя
-            print(card_dict)
+            except IndexError:
+                images.append("No_photo.jpg")
+                card_dict["images"] = images
+                all_cards.append(card_dict)
+                continue
+
+            for image in card.get("images"):
+                while True:
+                    try:
+                        req = requests.get(image.get("img"), headers = {"user-agent":UserAgent().random})
+                    except requests.exceptions.ConnectionError:
+                        req.status_code = 503
+                        break
+                    print(req.status_code)
+                    print(image.get("img"))
+
+                    if req.status_code == 200:
+                        break
+
+                    elif req.status_code == 503:
+                        break
+                    elif req.status_code == 404:
+                        break
+
+                    time.sleep(0.1) #asyncio
+                if req.status_code == 503 or req.status_code == 404:
+                    images.append("No_photo.jpg")
+                    continue
+                image_name = f"{card_dict.get('id')}_{user_id}_{i}"
+                with open(f"./parsingModule/images/{card_dict.get('id')}_{user_id}_{i}", "wb") as f:
+                    f.write(req.content)
+
+                i += 1
+                images.append(image_name)
+
+            card_dict["images"] = images
+            all_cards.append(card_dict)
+            
+            
+        return all_cards
+
 
                 
-        
+    def delete_all_photo(self, images: list):
+        """
+        Удаление всех использованных фото
+        """
 
+        for image in images:
+            if image == "No_photo.jpg" or image == "Нет возможности получить фото":
+                continue
+
+            os.remove(f"./parsingModule/images/{image}")
 
 if __name__ == "__main__":
     s = SmartAgentClient()
     st = s.get_streets_and_stations_dict("Кантемировская")
     print(st)
-    s.get_all_cards(True, streets_or_stations=('Кантемировская', st))
-    
+    k = s.get_all_cards(True, streets_or_stations=('Кантемировская', st), rooms = ["23", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"])
+    print(k)
+    for im in k:
+        s.delete_all_photo(im["images"])

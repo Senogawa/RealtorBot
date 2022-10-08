@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="referrer" content="no-referrer">
+                <title>Доска объявлений</title>
+        <meta name="smartvision" content="">
+                    <meta name="user" content="293536">
+            <meta name="region" content="1">
+                        <meta name="webphone-src" content="https://js.webphone.app/api.js">
+
+        <!-- Styles -->
+        <link href="/build/public/css/main.css?d313be0bebbac479253a" rel="stylesheet">
+
+        <!-- Other -->
+        <meta name="google-site-verification" content="CMRwAvPcvqfA4kyVFPfxSFlmGaOsop4NsAl4TkDF4DE">
+        <meta name="robots" content="noyaca">
+        <meta name="enot" content="2001610887595pfYVv_C7DC3u5WC3GB35bDNgUbkf_DGH" />
+    </head>
+    <body>
+        <div id="root" class="root" data-mode="bar" data-user="293536" data-region="1" data-chrome-plugin="" data-flash-errors='[]'>
+            <div class="wrapper">
+                                    <v-smartvision offer="1"></v-smartvision>
+                
+                                    <v-header json='{"main":[{"href":"\/#tariffs","embed":"<i class=\"i_l i_blue i_dollar-o\"><\/i> Тарифы","data-menu":"rate","offset":true}],"additional":[]}' design="private" size="small" ref="header-new">
+                                            </v-header>
+                
+                <main>
+    <v-board ref="board"></v-board>
+</main>
+
+<v-expands ref="expands"></v-expands>
+
+    <v-modal-board-actions ref="board-actions"></v-modal-board-actions>
+
+    <v-modal-ad-complain ref="ad-complain"></v-modal-ad-complain>
+    <v-modal-ad-publish ref="ad-publish"></v-modal-ad-publish>
+    <v-modal-ad-share ref="ad-share"></v-modal-ad-share>
+    <v-modal-ad-hide ref="ad-hide"></v-modal-ad-hide>
+    <v-modal-ad-history ref="ad-history"></v-modal-ad-history>
+    <v-modal-ad-work ref="ad-work"></v-modal-ad-work>
+    <v-modal-ad-order-user ref="ad-order-user"></v-modal-ad-order-user>
+    <v-modal-ad-repostvk ref="ad-repostvk"></v-modal-ad-repostvk>
+    <v-modal-ad-notes ref="ad-notes"></v-modal-ad-notes>
+    <v-modal-ad-analyse ref="ad-analyse"></v-modal-ad-analyse>
+    <v-modal-ad-dynamics ref="ad-dynamics"></v-modal-ad-dynamics>
+    <v-modal-ad-building ref="ad-building"></v-modal-ad-building>
+    <v-modal-ad-records ref="ad-records"></v-modal-ad-records>
+    <v-modal-ad-calls ref="ad-calls"></v-modal-ad-calls>
+    <v-modal-ad-funnels ref="ad-funnel"></v-modal-ad-funnels>
+    <v-modal-ad-opened-phones ref="ad-opened-phones"></v-modal-ad-opened-phones>
+
+    <v-modal-mtt-lead ref="mtt-lead"></v-modal-mtt-lead>
+
+    <!--
+    <v-lead-source ref="lead-source"></v-lead-source>
+    <v-lead-event ref="lead-event"></v-lead-event>
+    <v-lead-worker ref="lead-worker"></v-lead-worker>
+    <v-lead-phone ref="lead-phone"></v-lead-phone>
+    <v-lead-email ref="lead-email"></v-lead-email>
+    -->
+
+    <v-tags ref="tags"></v-tags>
+
+                            </div>
+
+                            <v-bar ref="bar"></v-bar>
+            
+            
+            <v-zoom ref="zoom"></v-zoom>
+            <v-station ref="station"></v-station>
+            <v-form-collecting ref="collecting"></v-form-collecting>
+
+                            <v-user ref="user"></v-user>
+                <v-settings ref="settings"></v-settings>
+                <v-cropper ref="cropper"></v-cropper>
+	            <v-history-desc ref="historyDesc"></v-history-desc>
+                <v-sitemode ref="selectSitemodeModal"></v-sitemode>
+                <v-public-debug mode="full" ref="debug"></v-public-debug>
+
+            
+            <v-form-ad-edit ref="ad-edit"></v-form-ad-edit>
+            <v-region ref="region"></v-region>
+            <v-tip ref="tip"></v-tip>
+            <v-hint ref="hint"></v-hint>
+            <v-modal-whatsapp ref="whatsapp"></v-modal-whatsapp>
+            <v-modal-question ref="question"></v-modal-question>
+            <v-modal-video ref="video"></v-modal-video>
+            <v-modal selector=".ad" data-type="add_adword" :info="{default: {title: 'SmartAgent — подача объявления', url: '/?type=add_adword'}}" ref="ad-guest">
+                                    <a href="/bulletin-board?type=add_adword&site_type=1&is_obj=1" target="_blank" class="btn btn_light-border">Сдать</a>
+                    <a href="/bulletin-board?type=add_adword&site_type=1&is_obj=0" target="_blank" class="btn btn_light-border">Снять</a>
+                    <a href="/bulletin-board?type=add_adword&site_type=2&is_obj=1" target="_blank" class="btn btn_light-border">Продать</a>
+                    <a href="/bulletin-board?type=add_adword&site_type=2&is_obj=0" target="_blank" class="btn btn_light-border">Купить</a>
+                            </v-modal>
+
+            <v-youtube v-bind="{
+                src: 'https://www.youtube.com/embed/jh-4P5xvd80?autoplay=1&enablejsapi=1&rel=0',
+                modal: {
+                    selector: '.smartvision-video',
+                    info: {
+                        default: {
+                            title: 'SmartVision — видеопрезентация',
+                            url: '/?type=smartvision',
+                        },
+                    },
+                }}">
+                <div class="plugin-block hidden-xs">
+                    <a href="https://chrome.google.com/webstore/detail/smartagent/ibahpmhifmnedoegjcgdcidnmnpnbgmp" target="_blank" class="plugin-install btn btn_blue">
+                        <div class="plugin-icon"></div>
+                        <div>
+                            <div class="icon">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </div>
+                            <div class="title">
+                                Установить <br /> расширение
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </v-youtube>
+
+	        <v-youtube v-bind="{
+                src: 'https://www.youtube.com/embed/ihxQ3PvixKQ?autoplay=1&enablejsapi=1&rel=0',
+                srcMobile: 'https://www.youtube.com/embed/irb7lYX5ddI?autoplay=1&enablejsapi=1&rel=0',
+                stretchMobile: true,
+                modal: {
+                    selector: '.smartagent-video',
+                    info: {
+                        default: {
+                            title: 'SmartAgent — видеопрезентация',
+                            url: '/?type=video',
+                        },
+                        short: {
+                            title: 'SmartAgent — видеопрезентация',
+                            url: '/#v',
+                        },
+                    },
+                }}"></v-youtube>
+
+	        
+            <v-presentation v-bind="{
+                src: 'O3-y_ej_flE',
+                code : '511',
+                modal: {
+                    selector: '.tutorial-video',
+                    info: {
+                        default: {
+                            title: 'SmartAgent — видеоинструкция',
+                            url: '/?type=tutorial',
+                        },
+                    },
+                }}" ref="presentation"></v-presentation>
+
+	        <v-youtube v-bind="{
+                src: 'https://www.youtube.com/embed/kyUPSu2T-aY?autoplay=1&enablejsapi=1&rel=0',
+                modal: {
+                    selector: '.tutorial-employees',
+                    info: {
+                        default: {
+                            title: 'Управление сотрудниками',
+                            url: '/?type=tutorial-employees',
+                        },
+                    },
+                }}"></v-youtube>
+
+	        <v-youtube v-bind="{
+                src: 'https://www.youtube.com/embed/9Y-h9hu_z0c?autoplay=1&enablejsapi=1&rel=0',
+                modal: {
+                    selector: '.tutorial-service',
+                    info: {
+                        default: {
+                            title: 'Услуги и цены',
+                            url: '/?type=tutorial-service',
+                        },
+                    },
+                }}"></v-youtube>
+
+            <v-youtube v-bind="{
+                src: 'https://www.youtube.com/embed/PzCtGyL-cXQ?autoplay=1&enablejsapi=1&rel=0',
+                modal: {
+                    selector: '.tutorial-crm',
+                    info: {
+                        default: {
+                            title: 'CRM система SmartAgent',
+                            url: '/?type=tutorial-crm',
+                        },
+                    },
+                }}"></v-youtube>
+
+            <v-youtube v-bind="{
+                src: 'https://www.youtube.com/embed/v8qV9E4io7U?autoplay=1&enablejsapi=1&rel=0',
+                modal: {
+                    selector: '.tutorial-base',
+                    info: {
+                        default: {
+                            title: 'База недвижимости SmartAgent',
+                            url: '/?type=tutorial-base',
+                        },
+                    },
+                }}"></v-youtube>
+
+            <v-modal-training></v-modal-training>
+
+            
+                            <v-floating-buttons up="1"></v-floating-buttons>
+                    </div>
+
+        
+        
+        <!-- Scripts -->
+        <script src="https://cdn.tiny.cloud/1/v2wtfvoalxq2urcx4fisdg1jys44lx0q1avw9vjrvfc1giqa/tinymce/6/tinymce.min.js"></script>
+        <script type="text/javascript">
+            window._userData = JSON.parse('{"id":293536,"login":"+7 (901) 748-05-63","phone":"+7 (901) 748-05-63","phone_as_manager":"","email":"bitrix-m@yandex.ru","name":"Михаил","recheck_status":1,"tarifs_id":2101011,"role":"user","balance":0,"company_id":null,"gendoc_token":false,"region_id":1,"is_agent":false,"is_company":false,"is_company_manager":false,"is_company_administrator":false,"is_company_agent":false,"restriction_flags":{"send_tarif_sms":1,"import_my_objects":1,"allow_publication":1,"allow_ads_work":1,"allow_publish_for_feed":1},"avatar":"","tarif":{"show_concurents":"0","show_source":"1","cropper":"0","additional_tools":"0"},"permissions":["100","101","102","103","200","201","202","203","204","300","301","400","401","402","403","404","501","502","503","504","505","506","507","508","601"],"perm_txt":["show_balance","show_payments_history","change_tarif","recieve_notifications_zerobalance","allow_add_proposal_ads","allow_add_clients_ads","allow_delete_clients_ads","allow_add_objects_ads","allow_delete_objects_ads","allow_add_edit_orders","allow_delete_orders","show_objects","show_clients","allow_buy_objects","allow_buy_clients","open_archive","owner","operator_on_check","archive","my_agency","with_orders","smart_colleagues_for_agents","smart_colleagues","agents","external_call"],"allow_ads_work":1,"allow_employee":1,"allow_employee_order":1,"allow_publication":1,"show_phones":[1]}');
+        </script>
+
+        
+        <script type="text/javascript" src="/build/public/js/main.js?d313be0bebbac479253a" defer></script>
+        <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=explicit" async></script>
+        <script type="text/javascript" src="https://webasr.yandex.net/jsapi/v1/webspeechkit.js" async></script>
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+        
+                    <!-- Counters -->
+            <script>var __cs = __cs || [];__cs.push(["setCsAccount", "GYEsTtyLdzvvCTLKhgHq3WbmtrlPNYBs"]);</script>
+
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function () {
+            try {
+                w.yaCounter11583841 = new Ya.Metrika({
+                    id: 11583841,
+                    clickmap: true,
+                    trackLinks: true,
+                    accurateTrackBounce: true,
+                    webvisor: true
+                });
+
+                if (w.yaCounter11583841) {
+                                            w.yaCounter11583841.reachGoal("auth");
+                        console.log("ya reachGoal auth");
+                    
+                    
+                                    }
+            } catch (e) {
+            }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () {
+                n.parentNode.insertBefore(s, n);
+            };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else {
+            f();
+        }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript>
+    <div><img src="https://mc.yandex.ru/watch/11583841" style="position:absolute; left:-9999px;" alt=""/></div>
+</noscript>
+<!-- /Yandex.Metrika counter -->
+
+<!--<script charset="UTF-8" src="https://cdn.sendpulse.com/js/push/3be0dac00466b371431083a03140fd19_1.js" async></script>-->
+<script charset="utf-8" src="https://cdn.pushdealer.com/f8338d55/script_0.js" async></script>
+
+
+<img src="https://mc.yandex.ru/pixel/369726892081004886?rnd=%aw_random%" alt="" />
+
+<!-- Facebook Pixel Code -->
+<script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1161450127375328');
+    fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1161450127375328&ev=PageView&noscript=1" /></noscript>
+<!-- End Facebook Pixel Code -->
+
+<!-- VK Pixel -->
+<script type="text/javascript">!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?168",t.onload=function(){VK.Retargeting.Init("VK-RTRG-157379-hZ3iW"),VK.Retargeting.Hit()},document.head.appendChild(t)}();</script>
+<noscript><img src="https://vk.com/rtrg?p=VK-RTRG-157379-hZ3iW" style="position:fixed; left:-999px;" alt=""/></noscript>
+<script type="text/javascript">(window.Image ? (new Image()) : document.createElement('img')).src = 'https://vk.com/rtrg?p=VK-RTRG-157379-hZ3iW';</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10177521-1"></script>
+<script type="text/javascript">
+    function initGA() {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-10177521-1');
+
+        if (ga) {
+            ga('create', 'UA-10177521-1', 'auto');
+            ga('send', 'pageview');
+
+            
+            
+                    }
+    }
+</script>
+            </body>
+</html>

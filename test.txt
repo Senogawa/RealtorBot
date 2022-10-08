@@ -1,0 +1,57 @@
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="source[current]"
+
+all
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="source[all][type_status]"
+
+1
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="source[all][state_status]"
+
+1
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="section"
+
+3
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="price[type]"
+
+all
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="price[from]"
+
+100 000
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="price[to]"
+
+
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="stage"
+
+all
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="mode"
+
+list
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="status"
+
+active
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="page"
+
+2
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="force"
+
+1
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="region"
+
+1
+-----------------------------126416209439741952021867887384
+Content-Disposition: form-data; name="quantity"
+
+20
+-----------------------------126416209439741952021867887384--

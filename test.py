@@ -1,4 +1,2 @@
-t = [1,2,3,4]
+from loader import card_states
 
-for i, g in enumerate(t):
-    print(i,g)

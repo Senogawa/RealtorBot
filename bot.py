@@ -1,14 +1,16 @@
 from aiogram import Dispatcher, Bot
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 import asyncio
+from handlers.users.main_menu_handler import register_all_main_menu_handlers
+from handlers.users.collect_info_about_form import register_all_collecting_info_handlers
 
 from loader import bot_meta
 
 bot = Bot(bot_meta.token)
 dp = Dispatcher(bot, storage = MemoryStorage())
 
-
-
+register_all_main_menu_handlers(dp)
+register_all_collecting_info_handlers(dp)
 
 async def bot_start_pooling():
     try:

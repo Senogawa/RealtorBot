@@ -54,6 +54,7 @@ class SmartAgentClient:
             "source[current]":"all",
             "source[all][type_status]":"1",
             "source[all][state_status]":"1",
+            "source[all][direct][0]":"1",
             "section":"4",
             "price[type]":"all",
             "price[from]":"",
@@ -97,7 +98,7 @@ class SmartAgentClient:
         return streets_and_stations_dict
 
 
-    def get_all_cards(self, sell_or_arend: bool, price_from: str = "", price_to: str = "", streets_or_stations:tuple = "", user_id:int = 0, rooms = []) -> list:
+    def get_all_cards(self, sell_or_rent: bool, price_from: str = "", price_to: str = "", streets_or_stations:tuple = "", user_id:int = 0, rooms: list = []) -> list:
         """
         Получение списка любой недвижимости\n
         streets_or_stations=('Москва г, Кандинского ул', get_streets_and_stations_dict(street: str))
@@ -123,7 +124,7 @@ class SmartAgentClient:
             return number_tuple
 
 
-        if sell_or_arend:
+        if sell_or_rent: #TODO maybe problems
             self.data["section"] = card_states["Продажа"]
 
         if streets_or_stations != "" and streets_or_stations[0] in streets_or_stations[1]["streets"].keys():
@@ -160,9 +161,10 @@ class SmartAgentClient:
             else:
                 card_dict["name"] = f"{card.get('caption')}, {card.get('land_area')} сот."
             card_dict["price"] = card["price"].get("RUB")
-            if "Земля" not in card.get("caption") and "Доля" not in card.get("caption"):
+            if "Земля" not in card.get("caption") and "Доля" not in card.get("caption") and "Комната" not in card.get("caption"):
+                print(card_dict["name"])
                 card_dict["area_price"] = card["price"]["area"].get("RUB")
-            card_dict["id"] = card.get("id")
+            card_dict["id"] = str(card.get("id"))
             card_dict["metro"] = {
                 "name":card.get("metro_station"),
                 "lenght":card.get("metro_distance")
@@ -194,7 +196,7 @@ class SmartAgentClient:
                         req.status_code = 503
                         break
                     print(req.status_code)
-                    print(image.get("img"))
+                    #print(image.get("img"))
 
                     if req.status_code == 200:
                         break
@@ -238,7 +240,8 @@ if __name__ == "__main__":
     s = SmartAgentClient()
     st = s.get_streets_and_stations_dict("Кантемировская")
     print(st)
-    k = s.get_all_cards(True, streets_or_stations=('Кантемировская', st), rooms = ["23", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"])
+    k = s.get_all_cards(True, streets_or_stations=('Кантемировская', st))
     print(k)
+    #rooms = ["23", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"]
     for im in k:
         s.delete_all_photo(im["images"])

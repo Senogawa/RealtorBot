@@ -12,10 +12,14 @@ class Boards:
 
     form_type_flat = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Выбрать все")
     form_type_flat.add(*__form_buttons_first_layer)
+    form_type_flat.add("Назад")
+    form_type_flat.add("Закончить с выбором параметров")
 
     form_type_commercian = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Выбрать все")
     form_type_commercian.add(*__form_buttons_second_layer)
+    form_type_commercian.add("Назад")
+    form_type_commercian.add("Закончить с выбором параметров")
 
-    all_form_answers = [__form_buttons_first_layer, __form_buttons_main_layer, __form_buttons_second_layer, "Выбрать все объявления", "Выбрать все"]
+    all_form_answers = [*__form_buttons_first_layer, *__form_buttons_main_layer, *__form_buttons_second_layer, "Выбрать все объявления", "Выбрать все", "Назад"]
 if __name__ == "__main__":
     p = Boards()

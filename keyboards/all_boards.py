@@ -27,6 +27,11 @@ class Boards:
     accept_form_data_board.add("Заполнить заново")
 
     sell_or_rent_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add(*["Аренда", "Продажа"])
+    sell_or_rent_board.add("Назад")
+
+    price_from_to_board = types.ReplyKeyboardMarkup(resize_keyboard = True)
+    price_from_to_board.add("Не указывать ценовой диапазон")
+    price_from_to_board.add("Назад")
 
     all_form_answers = [*__form_buttons_first_layer, *__form_buttons_main_layer, *__form_buttons_second_layer, "Выбрать все объявления", "Выбрать все", "Назад"]
 if __name__ == "__main__":

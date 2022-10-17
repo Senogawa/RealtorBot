@@ -4,11 +4,14 @@ from loader import card_states
 class Boards:
     form_type_board = types.ReplyKeyboardMarkup(resize_keyboard = True)
     __form_buttons_main_layer = list(card_states.keys())
+    __form_buttons_main_layer.remove("Аренда")
+    __form_buttons_main_layer.remove("Продажа")
     __form_buttons_first_layer = list(card_states.get("Квартира")[1].keys())
     __form_buttons_second_layer = list(card_states.get("Коммерческая недвижимость")[1].keys())
     
     form_type_board.add("Выбрать все объявления")
     form_type_board.add(*__form_buttons_main_layer)
+    form_type_board.add("Закончить с выбором параметров")
 
     form_type_flat = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Выбрать все")
     form_type_flat.add(*__form_buttons_first_layer)
@@ -19,6 +22,11 @@ class Boards:
     form_type_commercian.add(*__form_buttons_second_layer)
     form_type_commercian.add("Назад")
     form_type_commercian.add("Закончить с выбором параметров")
+
+    accept_form_data_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Все верно")
+    accept_form_data_board.add("Заполнить заново")
+
+    sell_or_rent_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add(*["Аренда", "Продажа"])
 
     all_form_answers = [*__form_buttons_first_layer, *__form_buttons_main_layer, *__form_buttons_second_layer, "Выбрать все объявления", "Выбрать все", "Назад"]
 if __name__ == "__main__":

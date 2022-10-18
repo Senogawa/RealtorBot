@@ -15,6 +15,7 @@ async def start(message: types.Message, state: FSMContext):
     await state.set_data({
             "form_type":list(),
             "form_type_names":list()
+
     })
     await BotStates.form_type_state.set()
 

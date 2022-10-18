@@ -7,6 +7,10 @@ from loader import card_states
 
 async def accept(message: types.Message, state: FSMContext):
     if message.text == "Все верно":
+        await state.update_data({
+            "price_from": "",
+            "price_to": ""
+        })
         await message.answer("Аренда или продажа?", reply_markup = Boards.sell_or_rent_board)
         await BotStates.sell_of_rent_state.set()
         return

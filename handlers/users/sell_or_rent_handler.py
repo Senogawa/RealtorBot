@@ -6,11 +6,15 @@ from loader import card_states
 
 
 async def sell_or_rent(message: types.Message, state: FSMContext):
+    price_data = await state.get_data()
+    price_from: str = price_data["price_from"]
+    price_to: str = price_data["price_to"]
+
     if message.text == "Аренда":
         await state.update_data({
             "sell_or_rent": False
         })
-        await message.answer("Введите ценовой диапазон\n1.Цена от:\n2.Цена до\n\nВводите только цифры", reply_markup = Boards.price_from_to_board)
+        await message.answer(f"Введите ценовой диапазон\n1.Цена от: {price_from}\n2.Цена до: {price_to}\n\nВводите только цифры", reply_markup = Boards.price_from_to_board)
         await BotStates.price_from_state.set()
         return
 
@@ -18,7 +22,7 @@ async def sell_or_rent(message: types.Message, state: FSMContext):
         await state.update_data({
             "sell_or_rent": True
         })
-        await message.answer("Введите ценовой диапазон\n1.Цена от:\n2.Цена до\n\nВводите только цифры", reply_markup = Boards.price_from_to_board)
+        await message.answer(f"Введите ценовой диапазон\n1.Цена от: {price_from}\n2.Цена до: {price_to}\n\nВводите только цифры", reply_markup = Boards.price_from_to_board)
         await BotStates.price_from_state.set()
         return
 

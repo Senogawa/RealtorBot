@@ -69,6 +69,7 @@ card_states = {
 
 }
 
+
 del bot_cnf
 del db_cnf
 del smart_agent_cnf

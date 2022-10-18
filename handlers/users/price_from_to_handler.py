@@ -8,8 +8,12 @@ from loader import card_states
 async def price_from(message: types.Message, state: FSMContext):
 
     if message.text == "Не указывать ценовой диапазон":
+        await state.update_data({
+            "price_from": "",
+            "price_to": ""
+        })
         await message.answer("Введите улицу или метро для поиска", reply_markup = Boards.streets_or_station_input_board)
-        await BotStates.street_of_station_input_state.set()
+        await BotStates.street_or_station_input_state.set()
         return
 
     elif message.text == "Назад":
@@ -49,12 +53,21 @@ async def price_to(message: types.Message, state: FSMContext):
         return
 
     if message.text.isdigit():
+        if int(message.text) < int(price_from):
+            await message.answer("'Цена до' должна быть больше, чем 'Цена от'")
+            return
+
         await state.update_data({
             "price_to": message.text
         })
-        await message.answer("Введите улицу или метро для поиска")
-        #TODO закончил здесь с ценами, осталась доработка цены до
+        await message.answer("Введите улицу или метро для поиска", reply_markup = Boards.streets_or_station_input_board)
+        res = await state.get_data()
+        print(res)
+        await BotStates.street_or_station_input_state.set()
+        return
 
+    await message.answer("Вводте только цифры")
+    return
 
 def register_all_price_from_to_handler(dp: Dispatcher):
     dp.register_message_handler(price_from, state = BotStates.price_from_state)

@@ -55,7 +55,7 @@ async def form_type_choice(message: types.Message, state: FSMContext):
         print(res)
 
 
-        await message.answer(create_user_text(form_type_names), reply_markup = Boards.accept_form_data_board)
+        await message.answer(create_user_text(set(form_type_names)), reply_markup = Boards.accept_form_data_board)
         await BotStates.accept_form_type_state.set()
         return
         #TODO запрос о подтверждении
@@ -134,7 +134,7 @@ async def form_type_multi_choice(message: types.Message, state: FSMContext):
         })
         res = await state.get_data() # tests
         print(res)
-        await message.answer(create_user_text(form_type_names), reply_markup = Boards.accept_form_data_board)
+        await message.answer(create_user_text(set(form_type_names)), reply_markup = Boards.accept_form_data_board)
         await BotStates.accept_form_type_state.set()
         return
 

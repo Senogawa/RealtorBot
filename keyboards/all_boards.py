@@ -33,6 +33,12 @@ class Boards:
     price_from_to_board.add("Не указывать ценовой диапазон")
     price_from_to_board.add("Назад")
 
+    streets_or_station_input_board = types.ReplyKeyboardMarkup(resize_keyboard = True)
+    streets_or_station_input_board.add("Не выбирать улицу")
+    streets_or_station_input_board.add("Назад")
+
+    back_button_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Назад")
+
     all_form_answers = [*__form_buttons_first_layer, *__form_buttons_main_layer, *__form_buttons_second_layer, "Выбрать все объявления", "Выбрать все", "Назад"]
 if __name__ == "__main__":
     p = Boards()

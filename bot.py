@@ -5,6 +5,7 @@ from handlers.users.main_menu_handler import register_all_main_menu_handlers
 from handlers.users.collect_info_about_form import register_all_collecting_info_handlers
 from handlers.users.accept_form_data import register_all_accept_form_data_handlers
 from handlers.users.sell_or_rent_handler import register_all_sell_or_rent_handlers
+from handlers.users.price_from_to_handler import register_all_price_from_to_handler
 
 from loader import bot_meta
 
@@ -15,6 +16,7 @@ register_all_main_menu_handlers(dp)
 register_all_collecting_info_handlers(dp)
 register_all_accept_form_data_handlers(dp)
 register_all_sell_or_rent_handlers(dp)
+register_all_price_from_to_handler(dp)
 
 async def bot_start_pooling():
     try:

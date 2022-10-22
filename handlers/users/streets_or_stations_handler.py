@@ -5,9 +5,32 @@ from states.state import BotStates
 from loader import card_states
 from SmartAgentObject import agent
 
+
+def create_message(form_data: dict):
+    """
+    Создание сообщения о общих данных поиска
+    """
+
+    message = "Выбранные параметры:\n\n"
+    form_type_names = form_data.get("form_type_names")
+    price_from = form_data.get("price_from")
+    price_to = form_data.get("price_to")
+    sell_or_rent = form_data.get("sell_or_rent")
+    street_or_station = form_data.get("street_or_station", "Глобальный поиск")
+    message += "Тип объявления - "
+    for name in form_type_names:
+        message += name + ", "
+    message = message[0:-2] + ".\n\n"
+    message += f"Ценовой диапазон - {price_from + ' - ' + price_to if price_from != '' else 'Не указан'}.\n\n"
+    message += f"Аренда или продажа - {'Продажа' if sell_or_rent else 'Аренда'}\n\n"
+    message += f"Улица или метро - {street_or_station[0] if street_or_station != 'Глобальный поиск' else street_or_station}\n\n"
+    message += f"|INFO| Внимание, бот присылает объявления отдельными сообщениями, этот процесс нельзя остановить, вы уверены что хотите начать поиск? |INFO|"
+    return message
+
 async def street_or_station_input(message: types.Message, state: FSMContext):
     all_form_data = await state.get_data()
     print(all_form_data)
+
     if message.text == "Назад":
         await state.update_data({
             "price_from": "",
@@ -18,7 +41,7 @@ async def street_or_station_input(message: types.Message, state: FSMContext):
         return
 
     elif message.text == "Не выбирать улицу":
-        #TODO дублирование параметров в сообщении, подтверждение ввода #TODO обязательно доделать
+        await message.answer(create_message(all_form_data), reply_markup = Boards.confirmation_board)
         await BotStates.confirmation_state.set()
         return
 
@@ -49,6 +72,28 @@ async def street_or_station_choice(message: types.Message, state: FSMContext):
         await message.answer("Введите улицу или метро для поиска", reply_markup = Boards.streets_or_station_input_board)
         await BotStates.street_or_station_input_state.set()
         return
+
+    streets_and_stations_dict = await state.get_data()
+    print(streets_and_stations_dict)
+    streets_and_stations_dict = streets_and_stations_dict["streets_and_stations_dict"]
+    streets_and_stations = {name:value for name, value in streets_and_stations_dict["streets"].items()}
+
+    for name, value in streets_and_stations_dict["stations"].items():
+        streets_and_stations[name] = value
+
+    if streets_and_stations.get(message.text) == None:
+        await message.answer("Нет такого варианта, пожалуйста воспользуйтесь клавиатурой")
+        return
+
+    await state.update_data({
+        "street_or_station":(message.text, streets_and_stations[message.text]),
+        "streets_and_stations_dict": ""
+    })
+
+    form_data = await state.get_data()
+    await message.answer(create_message(form_data), reply_markup = Boards.confirmation_board)
+    await BotStates.confirmation_state.set()
+
 
 
 def register_all_streets_or_stations_handlers(dp: Dispatcher):

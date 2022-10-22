@@ -37,6 +37,10 @@ class Boards:
     streets_or_station_input_board.add("Не выбирать улицу")
     streets_or_station_input_board.add("Назад")
 
+    confirmation_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Начать поиск")
+    confirmation_board.add("Назад")
+    confirmation_board.add("Указать параметры с самого начала")
+
     back_button_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Назад")
 
     all_form_answers = [*__form_buttons_first_layer, *__form_buttons_main_layer, *__form_buttons_second_layer, "Выбрать все объявления", "Выбрать все", "Назад"]

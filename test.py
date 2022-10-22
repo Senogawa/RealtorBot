@@ -1,2 +1,3 @@
-from loader import card_states
-
+mes = "123"
+mes += "555"
+print(mes)

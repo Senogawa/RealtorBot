@@ -114,15 +114,21 @@ class SmartAgentClient:
                     headers = self.headers,
                     data = {
                         "id":f"{id}",
-                        "property":"2"
+                        "property":"1"
                     }
                 )
             number = number.json()
+            #print(number)
+            if not number.get("success"):
+                return (None, None)
+
             number_tuple = (number["payload"].get("name"), number["payload"].get("phone"))
             if dict is type(number_tuple[1]):
                 return ("Ссылка на объект", number_tuple[1].get("url"))
             return number_tuple
 
+        # print(get_phone("57351350"))
+        # os._exit(0)
 
         if sell_or_rent: #TODO maybe problems
             self.data["section"] = card_states["Продажа"]
@@ -163,7 +169,8 @@ class SmartAgentClient:
             card_dict["price"] = card["price"].get("RUB")
             if "Земля" not in card.get("caption") and "Доля" not in card.get("caption") and "Комната" not in card.get("caption"):
                 print(card_dict["name"])
-                card_dict["area_price"] = card["price"]["area"].get("RUB")
+                if sell_or_rent:
+                    card_dict["area_price"] = card["price"]["area"].get("RUB")
             card_dict["id"] = str(card.get("id"))
             card_dict["metro"] = {
                 "name":card.get("metro_station"),
@@ -210,8 +217,8 @@ class SmartAgentClient:
                 if req.status_code == 503 or req.status_code == 404:
                     images.append("No_photo.jpg")
                     continue
-                image_name = f"{card_dict.get('id')}_{user_id}_{i}"
-                with open(f"./parsingModule/images/{card_dict.get('id')}_{user_id}_{i}", "wb") as f:
+                image_name = f"{card_dict.get('id')}_{user_id}_{i}.jpg"
+                with open(f"./parsingModule/images/{card_dict.get('id')}_{user_id}_{i}.jpg", "wb") as f:
                     f.write(req.content)
 
                 i += 1
@@ -239,9 +246,10 @@ class SmartAgentClient:
 if __name__ == "__main__":
     s = SmartAgentClient()
     st = s.get_streets_and_stations_dict("Кантемировская")
-    print(st)
+    # print(st)
     k = s.get_all_cards(True, streets_or_stations=('Кантемировская', st))
-    print(k)
-    #rooms = ["23", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"]
-    for im in k:
-        s.delete_all_photo(im["images"])
+    # print(k)
+    # #rooms = ["23", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"]
+    # for im in k:
+    #     s.delete_all_photo(im["images"])
+    

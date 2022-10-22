@@ -86,8 +86,7 @@ async def street_or_station_choice(message: types.Message, state: FSMContext):
         return
 
     await state.update_data({
-        "street_or_station":(message.text, streets_and_stations[message.text]),
-        "streets_and_stations_dict": ""
+        "street_or_station":(message.text, streets_and_stations[message.text])
     })
 
     form_data = await state.get_data()

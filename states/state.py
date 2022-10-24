@@ -11,3 +11,4 @@ class BotStates(StatesGroup):
     street_of_station = State()
     street_or_station_choice_state = State()
     confirmation_state = State()
+    static_state = State()

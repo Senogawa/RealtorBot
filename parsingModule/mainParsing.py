@@ -65,7 +65,7 @@ class SmartAgentClient:
             "page":"1",
             "force":"1",
             "region":"1",
-            "quantity":"20"
+            "quantity":"50"
             }
         print("Клиент инициализирован")
         
@@ -108,7 +108,7 @@ class SmartAgentClient:
             """
             Получение номера телефона
             """
-
+            return (None, None)
             number = self.session.post(
                     url = "https://smartagent.ru/public-object/open-phone?fingerprint=264f832b6e6025c20a49616ad4f51712",
                     headers = self.headers,

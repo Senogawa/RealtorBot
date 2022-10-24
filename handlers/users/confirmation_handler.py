@@ -74,7 +74,7 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
         return
 
     elif message.text == "Начать поиск": #Отправка объявлений в бота
-        await message.answer("Начинается сбор данных")
+        await message.answer("Начинается сбор данных, ожидайте в течении 2-3 минут")
         form_data = await state.get_data()
 
         form_type = form_data["form_type"]

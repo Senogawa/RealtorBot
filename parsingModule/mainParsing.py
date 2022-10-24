@@ -65,7 +65,7 @@ class SmartAgentClient:
             "page":"1",
             "force":"1",
             "region":"1",
-            "quantity":"50"
+            "quantity":"15"
             }
         print("Клиент инициализирован")
         
@@ -108,7 +108,7 @@ class SmartAgentClient:
             """
             Получение номера телефона
             """
-            return (None, None)
+            #return (None, None)
             number = self.session.post(
                     url = "https://smartagent.ru/public-object/open-phone?fingerprint=264f832b6e6025c20a49616ad4f51712",
                     headers = self.headers,
@@ -212,9 +212,11 @@ class SmartAgentClient:
                         break
                     elif req.status_code == 404:
                         break
+                    elif req.status_code == 403:
+                        break
 
                     time.sleep(0.1) #asyncio
-                if req.status_code == 503 or req.status_code == 404:
+                if req.status_code == 503 or req.status_code == 404 or req.status_code == 403:
                     images.append("No_photo.jpg")
                     continue
                 image_name = f"{card_dict.get('id')}_{user_id}_{i}.jpg"

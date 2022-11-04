@@ -1,5 +1,6 @@
 from aiogram import types
 from loader import card_states
+from copy import deepcopy
 
 class Boards:
     form_type_board = types.ReplyKeyboardMarkup(resize_keyboard = True)
@@ -12,6 +13,9 @@ class Boards:
     form_type_board.add("Выбрать все объявления")
     form_type_board.add(*__form_buttons_main_layer)
     form_type_board.add("Закончить с выбором параметров")
+
+    form_type_board_admin = deepcopy(form_type_board)
+    form_type_board_admin.add("Настройки администратора")
 
     form_type_flat = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Выбрать все")
     form_type_flat.add(*__form_buttons_first_layer)

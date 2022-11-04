@@ -4,6 +4,7 @@ from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
 from SmartAgentObject import agent
+from loader import bot_meta
 import asyncio
 
 
@@ -62,6 +63,9 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
         return
 
     elif message.text == "Указать параметры с самого начала":
+        form_type_board = Boards.form_type_board
+        if str(message.from_id) in bot_meta.admins:
+            form_type_board = Boards.form_type_board_admin
         await state.set_data({
             "form_type":list(),
             "form_type_names":list()
@@ -69,7 +73,7 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
         })
         #res = await state.get_data()
         #print(res)
-        await message.answer("Выберите тип объявления", reply_markup = Boards.form_type_board)
+        await message.answer("Выберите тип объявления", reply_markup = form_type_board)
         await BotStates.form_type_state.set()
         return
 
@@ -140,12 +144,15 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
             agent.delete_all_photo(form["images"])
             await asyncio.sleep(1)
 
+        form_type_board = Boards.form_type_board
+        if str(message.from_id) in bot_meta.admins:
+            form_type_board = Boards.form_type_board_admin
         try:
-            await message.answer("Выберите тип объявления", reply_markup = Boards.form_type_board)
+            await message.answer("Выберите тип объявления", reply_markup = form_type_board)
         except Exception as ex:
             print("|| NOT CRITICAL LAST MESSAGE ||")
             await asyncio.sleep(15)
-            await message.answer("Выберите тип объявления", reply_markup = Boards.form_type_board)
+            await message.answer("Выберите тип объявления", reply_markup = form_type_board)
 
         await state.set_data({
             "form_type":list(),

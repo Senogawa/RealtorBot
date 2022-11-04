@@ -4,7 +4,7 @@ from configparser import ConfigParser
 @dataclass
 class Bot:
     token:str
-    admin:str
+    admins:str
 
 @dataclass
 class Database:
@@ -26,7 +26,7 @@ cnf.read("conf.ini")
 bot_cnf = cnf["TELEGRAM"]
 db_cnf = cnf["DATABASE"]
 smart_agent_cnf = cnf["SMARTAGENT"]
-bot_meta = Bot(bot_cnf["token"], bot_cnf["admin"])
+bot_meta = Bot(bot_cnf["token"], bot_cnf["admins"].split(","))
 db_meta = Database(db_cnf["user"], db_cnf["password"], db_cnf["host"], int(db_cnf["port"]), db_cnf["db"])
 smartagent_meta = SmartAgent(smart_agent_cnf["user"], smart_agent_cnf["password"])
 

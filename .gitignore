@@ -1,2 +1,5 @@
 venv/
 conf.ini
+server_data.txt
+test_conf.ini
+test.py

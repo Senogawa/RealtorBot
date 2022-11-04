@@ -2,6 +2,8 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
+from loader import bot_meta
+
 
 
 async def start(message: types.Message, state: FSMContext):
@@ -10,13 +12,18 @@ async def start(message: types.Message, state: FSMContext):
 настройку параметров поиска и получения информации об объявлениях.
 
 Сейчас вы будете переброшены в главное меню."""
+    form_type_board = Boards.form_type_board
+    if str(message.from_id) in bot_meta.admins:
+        form_type_board = Boards.form_type_board_admin
+
     await message.answer(bot_message)
-    await message.answer("Выберите тип объявления", reply_markup = Boards.form_type_board)
+    await message.answer("Выберите тип объявления", reply_markup = form_type_board)
     await state.set_data({
             "form_type":list(),
             "form_type_names":list()
 
     })
+    del form_type_board
     await BotStates.form_type_state.set()
 
 

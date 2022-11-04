@@ -3,6 +3,7 @@ from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
+from loader import bot_meta
 
 
 async def sell_or_rent(message: types.Message, state: FSMContext):
@@ -27,11 +28,15 @@ async def sell_or_rent(message: types.Message, state: FSMContext):
         return
 
     elif message.text == "Назад":
+        form_type_board = Boards.form_type_board
+        if str(message.from_id) in bot_meta.admins:
+            form_type_board = Boards.form_type_board_admin
+
         await state.set_data({
             "form_type":list(),
             "form_type_names":list()
         })
-        await message.answer("Выберите тип объявления", reply_markup = Boards.form_type_board)
+        await message.answer("Выберите тип объявления", reply_markup = form_type_board)
         await BotStates.form_type_state.set()
         return
 

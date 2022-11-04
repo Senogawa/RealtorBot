@@ -3,6 +3,8 @@ from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
+from loader import bot_meta
+
 
 def create_user_text(form_type_names: list):
     """
@@ -119,7 +121,10 @@ async def form_type_multi_choice(message: types.Message, state: FSMContext):
         })
         res = await state.get_data()
         print(res)
-        await message.answer("Выберите следующий параметр", reply_markup = Boards.form_type_board)
+        form_type_board = Boards.form_type_board
+        if str(message.from_id) in bot_meta.admins:
+            form_type_board = Boards.form_type_board_admin
+        await message.answer("Выберите следующий параметр", reply_markup = form_type_board)
         await BotStates.form_type_state.set()
         return
 
@@ -139,8 +144,13 @@ async def form_type_multi_choice(message: types.Message, state: FSMContext):
         return
 
     elif message.text == "Назад":
-        await message.answer("Выберите тип объявления", reply_markup = Boards.form_type_board)
+        form_type_board = Boards.form_type_board
+        if str(message.from_id) in bot_meta.admins:
+            form_type_board = Boards.form_type_board_admin
+
+        await message.answer("Выберите тип объявления", reply_markup = form_type_board)
         await BotStates.form_type_state.set()
+        del form_type_board
         return
 
     elif message.text not in Boards.all_form_answers:

@@ -12,3 +12,9 @@ class BotStates(StatesGroup):
     street_or_station_choice_state = State()
     confirmation_state = State()
     static_state = State()
+
+    admin_menu_state = State()
+    add_admin_state = State()
+    change_forms_quantity_state = State()
+    change_trials_finds_quantity_state = State()
+    change_trials_finds_form_quantity_state = State()

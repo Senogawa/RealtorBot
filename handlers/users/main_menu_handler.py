@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
-from loader import bot_meta
+from loader import get_config_data
 
 
 
@@ -12,8 +12,10 @@ async def start(message: types.Message, state: FSMContext):
 настройку параметров поиска и получения информации об объявлениях.
 
 Сейчас вы будете переброшены в главное меню."""
+
+    admins_list = get_config_data().get("admins").split(",")
     form_type_board = Boards.form_type_board
-    if str(message.from_id) in bot_meta.admins:
+    if str(message.from_id) in admins_list:
         form_type_board = Boards.form_type_board_admin
 
     await message.answer(bot_message)

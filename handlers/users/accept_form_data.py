@@ -3,10 +3,11 @@ from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
-from loader import bot_meta
+from loader import get_config_data
 
 
 async def accept(message: types.Message, state: FSMContext):
+    admins_list = get_config_data().get("admins").split(",")
     if message.text == "Все верно":
         await state.update_data({
             "price_from": "",
@@ -18,7 +19,7 @@ async def accept(message: types.Message, state: FSMContext):
         
     elif message.text == "Заполнить заново":
         form_type_board = Boards.form_type_board
-        if str(message.from_id) in bot_meta.admins:
+        if str(message.from_id) in admins_list:
             form_type_board = Boards.form_type_board_admin
 
         await state.set_data({

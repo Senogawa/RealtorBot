@@ -48,5 +48,13 @@ class Boards:
     back_button_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Назад")
 
     all_form_answers = [*__form_buttons_first_layer, *__form_buttons_main_layer, *__form_buttons_second_layer, "Выбрать все объявления", "Выбрать все", "Назад"]
+
+    admin_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Добавить администратора")
+    admin_board.add("Изменить количество форм для поиска")
+    admin_board.add("Изменить количество пробных поисков")
+    admin_board.add("Изменить количество пробных форм для поиска")
+    admin_board.add("Назад")
+    all_admin_answers = ["Добавить администратора", "Изменить количество форм для поиска", "Изменить количество пробных поисков", "Изменить количество пробных форм для поиска", "Назад"]
+
 if __name__ == "__main__":
     p = Boards()

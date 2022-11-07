@@ -4,7 +4,7 @@ from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
 from SmartAgentObject import agent
-from loader import bot_meta
+from loader import get_config_data
 import asyncio
 
 
@@ -14,6 +14,7 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
         Создание и заполнение медиа объекта
         """
 
+        admins_list = get_config_data().get("admins").split(",")
         sended_message = False
         media = types.MediaGroup()
         i = 0
@@ -64,7 +65,7 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
 
     elif message.text == "Указать параметры с самого начала":
         form_type_board = Boards.form_type_board
-        if str(message.from_id) in bot_meta.admins:
+        if str(message.from_id) in admins_list:
             form_type_board = Boards.form_type_board_admin
         await state.set_data({
             "form_type":list(),
@@ -145,7 +146,7 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
             await asyncio.sleep(1)
 
         form_type_board = Boards.form_type_board
-        if str(message.from_id) in bot_meta.admins:
+        if str(message.from_id) in admins_list:
             form_type_board = Boards.form_type_board_admin
         try:
             await message.answer("Выберите тип объявления", reply_markup = form_type_board)

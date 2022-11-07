@@ -3,7 +3,8 @@ from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
-from loader import bot_meta
+from loader import get_config_data
+from loader import create_config_data_message
 
 
 def create_user_text(form_type_names: list):
@@ -27,6 +28,7 @@ async def form_type_choice(message: types.Message, state: FSMContext):
     form_data: dict = await state.get_data()
     form_type: list = list(form_data["form_type"])
     form_type_names: list = list(form_data["form_type_names"])
+    admins_list = get_config_data().get("admins").split(",")
 
     if message.text == "Квартира" or message.text == "Коммерческая недвижимость":
         await state.update_data(
@@ -82,6 +84,17 @@ async def form_type_choice(message: types.Message, state: FSMContext):
         await BotStates.accept_form_type_state.set()
         return
 
+    elif message.text == "Настройки администратора" and str(message.from_id) in admins_list:
+        message_text = create_config_data_message()[1]
+        await message.answer(message_text, parse_mode = "HTML", reply_markup = Boards.admin_board)
+        await state.set_data({
+            "form_type":list(),
+            "form_type_names":list()
+
+            })
+        await BotStates.admin_menu_state.set()
+        return
+
     elif message.text not in Boards.all_form_answers:
         await message.answer("Пожалуйста воспользуйтесь клавиатурой")
         return #TODO остановился здесь
@@ -122,7 +135,7 @@ async def form_type_multi_choice(message: types.Message, state: FSMContext):
         res = await state.get_data()
         print(res)
         form_type_board = Boards.form_type_board
-        if str(message.from_id) in bot_meta.admins:
+        if str(message.from_id) in admins_list:
             form_type_board = Boards.form_type_board_admin
         await message.answer("Выберите следующий параметр", reply_markup = form_type_board)
         await BotStates.form_type_state.set()
@@ -145,7 +158,7 @@ async def form_type_multi_choice(message: types.Message, state: FSMContext):
 
     elif message.text == "Назад":
         form_type_board = Boards.form_type_board
-        if str(message.from_id) in bot_meta.admins:
+        if str(message.from_id) in admins_list:
             form_type_board = Boards.form_type_board_admin
 
         await message.answer("Выберите тип объявления", reply_markup = form_type_board)

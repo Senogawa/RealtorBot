@@ -86,8 +86,12 @@ class SmartAgentClient:
             "streets":{},
             "stations":{}
         }
-
-        res  = self.session.post("https://smartagent.ru/searcher/index/search2?fingerprint=264f832b6e6025c20a49616ad4f51712", headers = self.headers, data = data)
+        while True:
+            try:
+                res  = self.session.post("https://smartagent.ru/searcher/index/search2?fingerprint=264f832b6e6025c20a49616ad4f51712", headers = self.headers, data = data)
+                break
+            except requests.exceptions.ConnectionError:
+                continue
         streets_and_stations = res.json()
         
         for street in streets_and_stations["payload"]["streets"]:

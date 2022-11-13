@@ -15,6 +15,7 @@ class BotStates(StatesGroup):
 
     admin_menu_state = State()
     add_admin_state = State()
+    delete_admin_state = State()
     change_forms_quantity_state = State()
     change_trials_finds_quantity_state = State()
     change_trials_finds_form_quantity_state = State()

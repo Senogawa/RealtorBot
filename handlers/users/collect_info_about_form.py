@@ -3,8 +3,8 @@ from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
-from loader import get_config_data
-from loader import create_config_data_message
+from config_module import get_config_data
+from config_module import create_config_data_message
 
 
 def create_user_text(form_type_names: list):
@@ -28,7 +28,8 @@ async def form_type_choice(message: types.Message, state: FSMContext):
     form_data: dict = await state.get_data()
     form_type: list = list(form_data["form_type"])
     form_type_names: list = list(form_data["form_type_names"])
-    admins_list = get_config_data().get("admins").split(",")
+    admins_list = get_config_data().get("admins").split(", ")
+    admins_list.append(get_config_data().get("root"))
 
     if message.text == "Квартира" or message.text == "Коммерческая недвижимость":
         await state.update_data(
@@ -85,8 +86,12 @@ async def form_type_choice(message: types.Message, state: FSMContext):
         return
 
     elif message.text == "Настройки администратора" and str(message.from_id) in admins_list:
+        admin_board = Boards.admin_board
+        if str(message.from_id) == get_config_data().get("root"):
+            admin_board = Boards.root_board
+
         message_text = create_config_data_message()[1]
-        await message.answer(message_text, parse_mode = "HTML", reply_markup = Boards.admin_board)
+        await message.answer(message_text, parse_mode = "HTML", reply_markup = admin_board)
         await state.set_data({
             "form_type":list(),
             "form_type_names":list()
@@ -123,6 +128,8 @@ async def form_type_multi_choice(message: types.Message, state: FSMContext):
     form_type_multi: str = form_type_dict["form_type_multi"]
     form_type: list = list(form_type_dict["form_type"])
     form_type_names: list = list(form_type_dict["form_type_names"])
+    admins_list = get_config_data().get("admins").split(", ")
+    admins_list.append(get_config_data().get("root"))
 
     if message.text == "Выбрать все":
         form_type = list(card_states[form_type_multi][0]) + form_type

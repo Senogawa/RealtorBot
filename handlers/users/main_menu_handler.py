@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
-from loader import get_config_data
+from config_module import get_config_data
 
 
 
@@ -13,7 +13,8 @@ async def start(message: types.Message, state: FSMContext):
 
 Сейчас вы будете переброшены в главное меню."""
 
-    admins_list = get_config_data().get("admins").split(",")
+    admins_list = get_config_data().get("admins").split(", ")
+    admins_list.append(get_config_data().get("root"))
     form_type_board = Boards.form_type_board
     if str(message.from_id) in admins_list:
         form_type_board = Boards.form_type_board_admin

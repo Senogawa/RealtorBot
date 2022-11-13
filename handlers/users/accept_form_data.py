@@ -3,11 +3,12 @@ from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
-from loader import get_config_data
+from config_module import get_config_data
 
 
 async def accept(message: types.Message, state: FSMContext):
-    admins_list = get_config_data().get("admins").split(",")
+    admins_list = get_config_data().get("admins").split(", ")
+    admins_list.append(get_config_data().get("root"))
     if message.text == "Все верно":
         await state.update_data({
             "price_from": "",

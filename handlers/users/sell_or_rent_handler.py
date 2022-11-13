@@ -3,14 +3,15 @@ from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
-from loader import get_config_data
+from config_module import get_config_data
 
 
 async def sell_or_rent(message: types.Message, state: FSMContext):
     price_data = await state.get_data()
     price_from: str = price_data["price_from"]
     price_to: str = price_data["price_to"]
-    admins_list = get_config_data().get("admins").split(",")
+    admins_list = get_config_data().get("admins").split(", ")
+    admins_list.append(get_config_data().get("root"))
 
     if message.text == "Аренда":
         await state.update_data({

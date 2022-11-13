@@ -19,50 +19,6 @@ class SmartAgent:
     user:str
     password:str
 
-def create_config_data_message() -> tuple:
-    """
-    Выгрузка данных из конфига и составление сообщения
-    """
-
-    cnf = ConfigParser()
-    cnf.read("conf.ini")
-
-    config_data = {
-        "admins": cnf.get("TELEGRAM", "admins"),
-        "smartagent":{
-            "forms_quantity": cnf.get("SMARTAGENT", "forms_quantity"),
-            "trials_finds_quantity": cnf.get("SMARTAGENT", "trials_finds_quantity"),
-            "trials_finds_form_quantity": cnf.get("SMARTAGENT", "trials_finds_form_quantity")
-        }
-    }
-    message_text = "<b>[Параметры администраторов]</b>\n"
-    message_text += f"ID администраторов: {config_data.get('admins')}\n\n"
-    message_text += "<b>[Параметры для обычных пользователей]</b>\n"
-    message_text += f"Количество форм для поиска: {config_data.get('smartagent').get('forms_quantity')}\n\n"
-    message_text += f"<b>[Параметры для тестовых пользователей]</b>\n"
-    message_text += f"Количество пробных поисков: {config_data.get('smartagent').get('trials_finds_quantity')}\n"
-    message_text += f"Количество пробных форм для поиска: {config_data.get('smartagent').get('trials_finds_form_quantity')}\n\n"
-    message_text += "Выберите действие: "
-
-    return (config_data, message_text)
-
-def get_config_data():
-    """
-    Получение данных из конфигурационного файла
-    """
-
-    cnf = ConfigParser()
-    cnf.read("conf.ini")
-
-    config_data = {
-        "admins": cnf.get("TELEGRAM", "admins"),
-        "smartagent":{
-            "forms_quantity": cnf.get("SMARTAGENT", "forms_quantity"),
-            "trials_finds_quantity": cnf.get("SMARTAGENT", "trials_finds_quantity"),
-            "trials_finds_form_quantity": cnf.get("SMARTAGENT", "trials_finds_form_quantity")
-        }
-    }
-    return config_data
 
 cnf = ConfigParser()
 cnf.read("conf.ini")

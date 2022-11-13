@@ -5,6 +5,7 @@ from loader import card_states
 import json
 import os
 import time
+from config_module import get_config_data
 
 class SmartAgentClient:
     phpsessionid = ""
@@ -142,7 +143,8 @@ class SmartAgentClient:
         if len(rooms) != 0:
             for id, room in enumerate(rooms):
                 self.data[f"rooms[{id}]"] = room 
-
+        config_data = get_config_data()
+        self.data["quantity"] = config_data.get("smartagent").get("forms_quantity")
         self.data["price[from]"] = price_from
         self.data["price[to]"] = price_to
         #print(self.data)
@@ -245,13 +247,32 @@ class SmartAgentClient:
 
             os.remove(f"./parsingModule/images/{image}")
 
+    def test_requests(self, id):
+        #cook = requests.cookies.create_cookie("nbtmp", "=MjNzkwMTc0ODA1N")
+        cook1 = requests.cookies.create_cookie("nbtmpp", "dJyWyI3OTAxNzQ4MDU2MyIsIjc5MDE3NDgwNTYzNyIsIjc3OTAxNzQ4MDU2M")
+        #self.session.cookies.set_cookie(cook)
+        self.session.cookies.set_cookie(cook1)
+        print(self.session.cookies)
+        number = self.session.post(
+        url = "https://smartagent.ru/public-object/open-phone?fingerprint=264f832b6e6025c20a49616ad4f51712",
+        headers = self.headers,
+        data = {
+            "id":f"{id}",
+            "property":"4"
+            }
+        )
+        print(number)
+        number = number.json()
+        print(number)
+
 if __name__ == "__main__":
     s = SmartAgentClient()
-    st = s.get_streets_and_stations_dict("Кантемировская")
-    # print(st)
-    k = s.get_all_cards(True, streets_or_stations=('Кантемировская', st))
-    # print(k)
-    # #rooms = ["23", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"]
-    # for im in k:
-    #     s.delete_all_photo(im["images"])
+    # st = s.get_streets_and_stations_dict("Кантемировская")
+    # # print(st)
+    # k = s.get_all_cards(True, streets_or_stations=('Кантемировская', st))
+    # # print(k)
+    # # #rooms = ["23", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"]
+    # # for im in k:
+    # #     s.delete_all_photo(im["images"])
+    s.test_requests(57849828)
     

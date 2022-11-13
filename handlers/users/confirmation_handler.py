@@ -4,7 +4,7 @@ from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
 from SmartAgentObject import agent
-from loader import get_config_data
+from config_module import get_config_data
 import asyncio
 
 
@@ -14,7 +14,6 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
         Создание и заполнение медиа объекта
         """
 
-        admins_list = get_config_data().get("admins").split(",")
         sended_message = False
         media = types.MediaGroup()
         i = 0
@@ -45,6 +44,9 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
             i += 1
 
         return (media, sended_message)
+
+    admins_list = get_config_data().get("admins").split(", ")
+    admins_list.append(get_config_data().get("root"))
     if message.text == "Назад":
         form_data = await state.get_data()
         try:

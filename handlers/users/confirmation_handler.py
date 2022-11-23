@@ -93,7 +93,7 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
         street_or_station = form_data.get("street_or_station")
         streets_and_stations_data = (street_or_station[0], streets_and_stations_dict) if streets_and_stations_dict else ""
 
-        searched_data = agent.get_all_cards(sell_or_rent, price_from, price_to, streets_or_stations = (street_or_station[0], streets_and_stations_dict), user_id = message.from_id, rooms = form_type) if streets_and_stations_data != "" else agent.get_all_cards(sell_or_rent, price_from, price_to, user_id = message.from_id, rooms = form_type)
+        searched_data = await agent.get_all_cards(sell_or_rent, price_from, price_to, streets_or_stations = (street_or_station[0], streets_and_stations_dict), user_id = message.from_id, rooms = form_type) if streets_and_stations_data != "" else await agent.get_all_cards(sell_or_rent, price_from, price_to, user_id = message.from_id, rooms = form_type)
         if searched_data == None:
             await message.answer("По данным параметрам ничего не найдено")
             return

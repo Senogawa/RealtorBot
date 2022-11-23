@@ -6,6 +6,7 @@ import json
 import os
 import time
 from config_module import get_config_data
+import asyncio
 
 class SmartAgentClient:
     phpsessionid = ""
@@ -71,7 +72,7 @@ class SmartAgentClient:
         print("Клиент инициализирован")
         
 
-    def get_streets_and_stations_dict(self, street: str) -> dict:
+    async def get_streets_and_stations_dict(self, street: str) -> dict:
         """
         Получение списка улиц и станций метро и их id значений
         """
@@ -89,6 +90,7 @@ class SmartAgentClient:
         while True:
             try:
                 res  = self.session.post("https://smartagent.ru/searcher/index/search2?fingerprint=264f832b6e6025c20a49616ad4f51712", headers = self.headers, data = data)
+                await asyncio.sleep(0)
                 break
             except requests.exceptions.ConnectionError:
                 continue
@@ -103,13 +105,13 @@ class SmartAgentClient:
         return streets_and_stations_dict
 
 
-    def get_all_cards(self, sell_or_rent: bool, price_from: str = "", price_to: str = "", streets_or_stations:tuple = "", user_id:int = 0, rooms: list = []) -> list:
+    async def get_all_cards(self, sell_or_rent: bool, price_from: str = "", price_to: str = "", streets_or_stations:tuple = "", user_id:int = 0, rooms: list = []) -> list:
         """
         Получение списка любой недвижимости\n
         streets_or_stations=('Москва г, Кандинского ул', get_streets_and_stations_dict(street: str))
         """
 
-        def get_phone(id: str) -> tuple:
+        async def get_phone(id: str) -> tuple:
             """
             Получение номера телефона
             """
@@ -122,6 +124,7 @@ class SmartAgentClient:
                         "property":"1"
                     }
                 )
+            await asyncio.sleep(0)
             number = number.json()
             #print(number)
             if not number.get("success"):
@@ -156,6 +159,7 @@ class SmartAgentClient:
         cards_dict = req.json()
         #print(cards_dict)
         if cards_dict["payload"]["total"] == 0:
+            print(cards_dict)
             return None
 
         all_cards = list() #Список со всеми объявлениями
@@ -186,7 +190,7 @@ class SmartAgentClient:
             card_dict["address_area"] = card.get("address_area")
             card_dict["address_quick"] = card.get("address_quick")
             card_dict["description"] = card.get("description") if 'Объект имеет статус "Эксклюзивный источник"' not in card.get("description") else "Информация недоступна" #TODO убрать комментарий
-            card_dict["phone"] = get_phone(card_dict.get("id"))
+            card_dict["phone"] = await get_phone(card_dict.get("id"))
             try: #Проверка на доступность фото
                 if card["images"][0].get("blured"):
                     print("!")
@@ -205,6 +209,7 @@ class SmartAgentClient:
                 while True:
                     try:
                         req = requests.get(image.get("img"), headers = {"user-agent":UserAgent().random})
+                        await asyncio.sleep(0)
                     except requests.exceptions.ConnectionError:
                         req.status_code = 503
                         break
@@ -221,7 +226,7 @@ class SmartAgentClient:
                     elif req.status_code == 403:
                         break
 
-                    time.sleep(0.1) #asyncio
+                    await asyncio.sleep(0.1) #asyncio
                 if req.status_code == 503 or req.status_code == 404 or req.status_code == 403:
                     images.append("No_photo.jpg")
                     continue

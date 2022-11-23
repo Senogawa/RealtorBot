@@ -45,7 +45,7 @@ async def street_or_station_input(message: types.Message, state: FSMContext):
         await BotStates.confirmation_state.set()
         return
 
-    streets_and_stations: dict = agent.get_streets_and_stations_dict(message.text)
+    streets_and_stations: dict = await agent.get_streets_and_stations_dict(message.text)
     await state.update_data({
         "streets_and_stations_dict": streets_and_stations
     })

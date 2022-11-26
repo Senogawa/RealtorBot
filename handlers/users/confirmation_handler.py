@@ -6,6 +6,10 @@ from loader import card_states
 from SmartAgentObject import agent
 from config_module import get_config_data
 import asyncio
+from database_methods import get_users_list
+from database_methods import check_availability_users_in_database
+from database_methods import run_command
+import os
 
 
 async def confirmation_options_and_start_parsing(message: types.Message, state: FSMContext):
@@ -45,6 +49,14 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
 
         return (media, sended_message)
 
+    not_in_base = await check_availability_users_in_database(message, state)
+    if not_in_base:
+        return
+
+    test_users = await get_users_list(True)
+    test_users = test_users[0]
+    test_users = [value[0] for value in test_users]
+
     admins_list = get_config_data().get("admins").split(", ")
     admins_list.append(get_config_data().get("root"))
     if message.text == "Назад":
@@ -60,6 +72,7 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
             pass
         
         await state.set_data(form_data)
+
 
         await message.answer("Введите улицу или метро для поиска", reply_markup = Boards.streets_or_station_input_board)
         await BotStates.street_or_station_input_state.set()
@@ -91,9 +104,28 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
         streets_and_stations_dict = form_data.get("streets_and_stations_dict")
         print(streets_and_stations_dict)
         street_or_station = form_data.get("street_or_station")
-        streets_and_stations_data = (street_or_station[0], streets_and_stations_dict) if streets_and_stations_dict else ""
+        streets_and_stations_data = (street_or_station[0], streets_and_stations_dict) if streets_and_stations_dict else False
+        # print("--------")
+        # print(streets_and_stations_data)
+        # print(form_data)
+        #os._exit(0)
+        if str(message.from_id) in test_users:
+            if streets_and_stations_data:
+                searched_data = await asyncio.gather(asyncio.create_task(agent.get_all_cards(sell_or_rent, True, price_from, price_to, streets_or_stations = (street_or_station[0], streets_and_stations_dict), user_id = message.from_id, rooms = form_type, message = message)))
 
-        searched_data = await agent.get_all_cards(sell_or_rent, price_from, price_to, streets_or_stations = (street_or_station[0], streets_and_stations_dict), user_id = message.from_id, rooms = form_type) if streets_and_stations_data != "" else await agent.get_all_cards(sell_or_rent, price_from, price_to, user_id = message.from_id, rooms = form_type)
+            else:
+                 searched_data = await asyncio.gather(asyncio.create_task(agent.get_all_cards(sell_or_rent, True, price_from, price_to, user_id = message.from_id, rooms = form_type, message = message)))
+
+        else:
+            if streets_and_stations_data:
+                print("with street")
+                searched_data = await asyncio.gather(asyncio.create_task(agent.get_all_cards(sell_or_rent, price_from, price_to, streets_or_stations = (street_or_station[0], streets_and_stations_dict), user_id = message.from_id, rooms = form_type)))
+
+            else:
+                print("without street")
+                searched_data = await asyncio.gather(asyncio.create_task(agent.get_all_cards(sell_or_rent, price_from, price_to, user_id = message.from_id, rooms = form_type)))
+
+        searched_data = searched_data[0]
         if searched_data == None:
             await message.answer("По данным параметрам ничего не найдено")
             return
@@ -150,12 +182,50 @@ async def confirmation_options_and_start_parsing(message: types.Message, state: 
         form_type_board = Boards.form_type_board
         if str(message.from_id) in admins_list:
             form_type_board = Boards.form_type_board_admin
+
+        if str(message.from_id) in test_users:
+            test_user_info = await run_command(f"SELECT * FROM test_users WHERE test_member_id='{message.from_id}'")
+            test_user_info = test_user_info[0]
+            await run_command(f"UPDATE test_users SET trials_finds_quantity={test_user_info['trials_finds_quantity'] - 1} WHERE test_member_id='{message.from_id}'", "SET")
+            test_user_trials_finds_quantity = test_user_info['trials_finds_quantity'] - 1
+
+            if test_user_trials_finds_quantity == 0:
+                    await run_command(f"DELETE FROM test_users WHERE test_member_id='{message.from_id}'", "SET")
+                    await run_command(f"INSERT INTO users_used_trials_period(user_id) VALUES ('{message.from_id}')", "SET")
+
         try:
-            await message.answer("Выберите тип объявления", reply_markup = form_type_board)
+            if str(message.from_id) in test_users: #TODO проверка на количество оставшихся поисков
+                if test_user_trials_finds_quantity == 0:
+                    await message.answer("У вас закончились пробные поиски!\nЖелаете приобрести подписку?", reply_markup = Boards.payments_or_test_trial_board)
+                    await BotStates.subscription_or_test_trial_state.set()
+                    await state.set_data({
+                        "form_type":list(),
+                        "form_type_names":list()
+                        })
+                    return
+
+                await message.answer(f"У вас осталось {test_user_trials_finds_quantity} поисков\n\nВыберите тип объявления", reply_markup = form_type_board)
+
+            else:
+                await message.answer("Выберите тип объявления", reply_markup = form_type_board)
+
         except Exception as ex:
             print("|| NOT CRITICAL LAST MESSAGE ||")
             await asyncio.sleep(15)
-            await message.answer("Выберите тип объявления", reply_markup = form_type_board)
+            if str(message.from_id) in test_users: #TODO проверка на количество оставшихся поисков
+                if test_user_trials_finds_quantity == 0:
+                    await message.answer("У вас закончились пробные поиски!\nЖелаете приобрести подписку?", reply_markup = Boards.payments_or_test_trial_board)
+                    await BotStates.subscription_or_test_trial_state.set()
+                    await state.set_data({
+                        "form_type":list(),
+                        "form_type_names":list()
+                        })
+                    return
+
+                await message.answer(f"У вас осталось {test_user_trials_finds_quantity} поисков\n\nВыберите тип объявления", reply_markup = form_type_board)
+
+            else:
+                await message.answer("Выберите тип объявления", reply_markup = form_type_board)
 
         await state.set_data({
             "form_type":list(),

@@ -4,9 +4,16 @@ from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
 from config_module import get_config_data
+from database_methods import get_users_list
+from database_methods import check_availability_users_in_database
 
 
 async def sell_or_rent(message: types.Message, state: FSMContext):
+
+    not_in_base = await check_availability_users_in_database(message, state)
+    if not_in_base:
+        return
+
     price_data = await state.get_data()
     price_from: str = price_data["price_from"]
     price_to: str = price_data["price_to"]

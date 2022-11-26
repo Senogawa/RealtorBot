@@ -3,9 +3,15 @@ from aiogram.dispatcher.storage import FSMContext
 from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
+from database_methods import get_users_list
+from database_methods import check_availability_users_in_database
 
 
 async def price_from(message: types.Message, state: FSMContext):
+
+    not_in_base = await check_availability_users_in_database(message, state)
+    if not_in_base:
+        return
 
     if message.text == "Не указывать ценовой диапазон":
         await state.update_data({
@@ -40,6 +46,11 @@ async def price_from(message: types.Message, state: FSMContext):
     return
 
 async def price_to(message: types.Message, state: FSMContext):
+
+    not_in_base = await check_availability_users_in_database(message, state)
+    if not_in_base:
+        return
+
     price_data = await state.get_data()
     price_from: str = price_data["price_from"]
     price_to: str = price_data["price_to"]

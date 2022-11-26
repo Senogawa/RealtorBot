@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from configparser import ConfigParser
 
+
 @dataclass
 class Bot:
     token:str
@@ -69,6 +70,7 @@ card_states = {
 
 }
 
+payments_or_test_trial_message = "Oops!\nПохоже у Вас нет подписки на использование данного бота\nЖелаете приобрести подписку или попробовать тестовый период?"
 
 del bot_cnf
 del db_cnf

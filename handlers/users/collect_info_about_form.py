@@ -5,7 +5,8 @@ from states.state import BotStates
 from loader import card_states
 from config_module import get_config_data
 from config_module import create_config_data_message
-
+from database_methods import get_users_list
+from database_methods import check_availability_users_in_database
 
 def create_user_text(form_type_names: list):
     """
@@ -24,6 +25,10 @@ async def form_type_choice(message: types.Message, state: FSMContext):
     """
     Получение информации о типе объявления
     """
+
+    not_in_base = await check_availability_users_in_database(message, state)
+    if not_in_base:
+        return
 
     form_data: dict = await state.get_data()
     form_type: list = list(form_data["form_type"])
@@ -122,6 +127,10 @@ async def form_type_multi_choice(message: types.Message, state: FSMContext):
     """
     Выбор подъобьявления из Квартира или Коммерческая недвижимость
     """
+
+    not_in_base = await check_availability_users_in_database(message, state)
+    if not_in_base:
+        return
 
     form_type_dict: dict = await state.get_data()
     print(form_type_dict)

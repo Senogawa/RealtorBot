@@ -4,6 +4,8 @@ from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
 from SmartAgentObject import agent
+from database_methods import get_users_list
+from database_methods import check_availability_users_in_database
 
 
 def create_message(form_data: dict):
@@ -28,6 +30,11 @@ def create_message(form_data: dict):
     return message
 
 async def street_or_station_input(message: types.Message, state: FSMContext):
+
+    not_in_base = await check_availability_users_in_database(message, state)
+    if not_in_base:
+        return
+
     all_form_data = await state.get_data()
     print(all_form_data)
 
@@ -65,6 +72,11 @@ async def street_or_station_input(message: types.Message, state: FSMContext):
     return
 
 async def street_or_station_choice(message: types.Message, state: FSMContext):
+
+    not_in_base = await check_availability_users_in_database(message, state)
+    if not_in_base:
+        return
+
     if message.text == "Назад":
         await state.update_data({
             "streets_and_stations_dict": ""

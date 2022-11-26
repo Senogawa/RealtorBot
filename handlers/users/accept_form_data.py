@@ -4,9 +4,14 @@ from keyboards.all_boards import Boards
 from states.state import BotStates
 from loader import card_states
 from config_module import get_config_data
-
+from database_methods import get_users_list
+from database_methods import check_availability_users_in_database
 
 async def accept(message: types.Message, state: FSMContext):
+    not_in_base = await check_availability_users_in_database(message, state)
+    if not_in_base:
+        return
+
     admins_list = get_config_data().get("admins").split(", ")
     admins_list.append(get_config_data().get("root"))
     if message.text == "Все верно":

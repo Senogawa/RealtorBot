@@ -7,6 +7,9 @@ import os
 import time
 from config_module import get_config_data
 import asyncio
+import aiohttp
+from database_methods import run_command
+import copy
 
 class SmartAgentClient:
     phpsessionid = ""
@@ -105,7 +108,7 @@ class SmartAgentClient:
         return streets_and_stations_dict
 
 
-    async def get_all_cards(self, sell_or_rent: bool, price_from: str = "", price_to: str = "", streets_or_stations:tuple = "", user_id:int = 0, rooms: list = []) -> list:
+    async def get_all_cards(self, sell_or_rent: bool, test_user: bool = False, price_from: str = "", price_to: str = "", streets_or_stations:tuple = "", user_id:int = 0, rooms: list = [], message = None) -> list:
         """
         Получение списка любой недвижимости\n
         streets_or_stations=('Москва г, Кандинского ул', get_streets_and_stations_dict(street: str))
@@ -138,24 +141,33 @@ class SmartAgentClient:
         # print(get_phone("57351350"))
         # os._exit(0)
 
+        data = copy.deepcopy(self.data)
+
         if sell_or_rent: #TODO maybe problems
-            self.data["section"] = card_states["Продажа"]
+            data["section"] = card_states["Продажа"]
 
         if streets_or_stations != "" and streets_or_stations[0] in streets_or_stations[1]["streets"].keys():
-            self.data["streets[0]"] = streets_or_stations[1]["streets"][streets_or_stations[0]]
+            data["streets[0]"] = streets_or_stations[1]["streets"][streets_or_stations[0]]
 
         if streets_or_stations != "" and streets_or_stations[0] in streets_or_stations[1]["stations"].keys():
-            self.data["stations[0]"] = streets_or_stations[1]["stations"][streets_or_stations[0]]
+            data["stations[0]"] = streets_or_stations[1]["stations"][streets_or_stations[0]]
 
         if len(rooms) != 0:
             for id, room in enumerate(rooms):
-                self.data[f"rooms[{id}]"] = room 
+                data[f"rooms[{id}]"] = room 
         config_data = get_config_data()
-        self.data["quantity"] = config_data.get("smartagent").get("forms_quantity")
-        self.data["price[from]"] = price_from
-        self.data["price[to]"] = price_to
+        if test_user:
+            test_user_info = await run_command(f"SELECT * FROM test_users WHERE test_member_id='{message.from_id}'")
+            test_user_info = test_user_info[0]
+            data["quantity"] = test_user_info['trials_finds_form_quantity']
+
+        else:
+            data["quantity"] = config_data.get("smartagent").get("forms_quantity")
+
+        data["price[from]"] = price_from
+        data["price[to]"] = price_to
         #print(self.data)
-        req = self.session.post("https://smartagent.ru/search2/search?fingerprint=264f832b6e6025c20a49616ad4f51712", headers = self.headers, data = self.data)
+        req = self.session.post("https://smartagent.ru/search2/search?fingerprint=264f832b6e6025c20a49616ad4f51712", headers = self.headers, data = data)
         cards_dict = req.json()
         #print(cards_dict)
         if cards_dict["payload"]["total"] == 0:
@@ -208,7 +220,9 @@ class SmartAgentClient:
             for image in card.get("images"):
                 while True:
                     try:
-                        req = requests.get(image.get("img"), headers = {"user-agent":UserAgent().random})
+                        async with aiohttp.request("GET", image.get("img"), headers = {"user-agent":UserAgent().random}) as response:
+                        #req = requests.get(image.get("img"), headers = {"user-agent":UserAgent().random}) #TODO maybe problems here from async
+                            req = response.status
                         await asyncio.sleep(0)
                     except requests.exceptions.ConnectionError:
                         req.status_code = 503

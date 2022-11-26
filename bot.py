@@ -9,6 +9,7 @@ from handlers.users.price_from_to_handler import register_all_price_from_to_hand
 from handlers.users.streets_or_stations_handler import register_all_streets_or_stations_handlers
 from handlers.users.confirmation_handler import register_all_confirmation_handlers
 from handlers.admins.admin_menu import register_all_admin_menu_handlers
+from handlers.users.subscription_and_test_handler import register_all_subscription_and_test_handlers
 
 from loader import bot_meta
 
@@ -24,6 +25,7 @@ register_all_price_from_to_handler(dp)
 register_all_streets_or_stations_handlers(dp)
 register_all_confirmation_handlers(dp)
 register_all_admin_menu_handlers(dp)
+register_all_subscription_and_test_handlers(dp)
 
 async def bot_start_pooling():
     try:

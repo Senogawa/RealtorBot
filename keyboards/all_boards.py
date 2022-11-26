@@ -49,6 +49,8 @@ class Boards:
 
     all_form_answers = [*__form_buttons_first_layer, *__form_buttons_main_layer, *__form_buttons_second_layer, "Выбрать все объявления", "Выбрать все", "Назад"]
 
+    payments_or_test_trial_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add(*["Приобрести подписку", "Воспользоваться тестовым периодом"])
+
     admin_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Добавить администратора")
     admin_board.add("Изменить количество форм для поиска")
     admin_board.add("Изменить количество пробных поисков")

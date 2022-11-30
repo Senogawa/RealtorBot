@@ -6,6 +6,7 @@ from config_module import get_config_data
 from database_methods import get_users_list
 from database_methods import run_command
 from loader import payments_or_test_trial_message
+from middlewares.payments.payments_handler import products
 
 
 async def paysubs_or_start_test_trial_main(message: types.Message, state: FSMContext):
@@ -14,8 +15,8 @@ async def paysubs_or_start_test_trial_main(message: types.Message, state: FSMCon
     test_users = test_users[1]
 
     if message.text == "Приобрести подписку":
-        await run_command(f"INSERT INTO users(member_id) VALUES ('{message.from_id}')")
-        await message.answer("Вы записаны в базу\nВведите /start")
+        await message.answer("Есть несколько вариантов подписок, выберите для Вас самую удобную")
+        await products(message)
         return
 
     elif message.text == "Воспользоваться тестовым периодом":

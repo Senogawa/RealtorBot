@@ -19,6 +19,10 @@ class BotStates(StatesGroup):
     change_forms_quantity_state = State()
     change_trials_finds_quantity_state = State()
     change_trials_finds_form_quantity_state = State()
+    change_subs_prices_state = State()
+    moth_1_state = State()
+    moth_2_state = State()
+    moth_3_state = State()
 
     subscription_or_test_trial_state = State()
     add_subscription_state = State()

@@ -206,6 +206,7 @@ class SmartAgentClient:
             try: #Проверка на доступность фото
                 if card["images"][0].get("blured"):
                     print("!")
+                    await asyncio.sleep(0.1)
                     images.append("No_photo.jpg")
                     card_dict["images"] = images
                     all_cards.append(card_dict)

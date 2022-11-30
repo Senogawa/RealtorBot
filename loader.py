@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 from configparser import ConfigParser
+from aiogram import Bot
 
 
 @dataclass
-class Bot:
+class BotMeta:
     token:str
     admins:str
+    payments_token:str
 
 @dataclass
 class Database:
@@ -20,6 +22,10 @@ class SmartAgent:
     user:str
     password:str
 
+@dataclass
+class SubscriptionsData:
+    subs_dict:dict
+
 
 cnf = ConfigParser()
 cnf.read("conf.ini")
@@ -27,9 +33,17 @@ cnf.read("conf.ini")
 bot_cnf = cnf["TELEGRAM"]
 db_cnf = cnf["DATABASE"]
 smart_agent_cnf = cnf["SMARTAGENT"]
-bot_meta = Bot(bot_cnf["token"], bot_cnf["admins"].split(","))
+bot_meta = BotMeta(bot_cnf["token"], bot_cnf["admins"].split(","), bot_cnf["payments_token"])
 db_meta = Database(db_cnf["user"], db_cnf["password"], db_cnf["host"], int(db_cnf["port"]), db_cnf["db"])
 smartagent_meta = SmartAgent(smart_agent_cnf["user"], smart_agent_cnf["password"])
+
+subs = {name:value for name, value in cnf["SUBSCRIPTIONS"].items()}
+subscriptions_meta = SubscriptionsData(subs)
+del subs
+
+
+
+bot = Bot(bot_meta.token)
 
 card_states = {
     "Аренда":"4", # section

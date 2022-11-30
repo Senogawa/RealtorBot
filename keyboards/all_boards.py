@@ -51,7 +51,7 @@ class Boards:
 
     payments_or_test_trial_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add(*["Приобрести подписку", "Воспользоваться тестовым периодом"])
 
-    admin_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add("Добавить администратора")
+    admin_board = types.ReplyKeyboardMarkup(resize_keyboard = True)
     admin_board.add("Изменить количество форм для поиска")
     admin_board.add("Изменить количество пробных поисков")
     admin_board.add("Изменить количество пробных форм для поиска")
@@ -62,6 +62,11 @@ class Boards:
     root_board.add("Изменить количество форм для поиска")
     root_board.add("Изменить количество пробных поисков")
     root_board.add("Изменить количество пробных форм для поиска")
+    root_board.add("Изменить стоимость подписок")
     root_board.add("Назад")
+    root_payments_board = types.ReplyKeyboardMarkup(resize_keyboard = True).add("1 месяц")
+    root_payments_board.add("2 месяца")
+    root_payments_board.add("3 месяца")
+    root_payments_board.add("Назад")
 if __name__ == "__main__":
     p = Boards()

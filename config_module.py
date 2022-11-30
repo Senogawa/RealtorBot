@@ -15,6 +15,11 @@ def create_config_data_message() -> tuple:
             "forms_quantity": cnf.get("SMARTAGENT", "forms_quantity"),
             "trials_finds_quantity": cnf.get("SMARTAGENT", "trials_finds_quantity"),
             "trials_finds_form_quantity": cnf.get("SMARTAGENT", "trials_finds_form_quantity")
+        },
+        "subscriptions_prices":{
+            "1-month":int(cnf.get("SUBSCRIPTIONS", "1_month")) / 100,
+            "2-month":int(cnf.get("SUBSCRIPTIONS", "2_month")) / 100,
+            "3-month":int(cnf.get("SUBSCRIPTIONS", "3_month")) / 100
         }
     }
     message_text = "<b>[Параметры администраторов]</b>\n"
@@ -23,7 +28,8 @@ def create_config_data_message() -> tuple:
     message_text += f"Количество форм для поиска: {config_data.get('smartagent').get('forms_quantity')}\n\n"
     message_text += f"<b>[Параметры для тестовых пользователей]</b>\n"
     message_text += f"Количество пробных поисков: {config_data.get('smartagent').get('trials_finds_quantity')}\n"
-    message_text += f"Количество пробных форм для поиска: {config_data.get('smartagent').get('trials_finds_form_quantity')}\n\n"
+    message_text += f"Количество пробных форм для поиска: {config_data.get('smartagent').get('trials_finds_form_quantity')}\n"
+    message_text += f"Стоимость подписок:\n        1 - месяц: {config_data.get('subscriptions_prices').get('1-month')}₽\n        2 - месяц: {config_data.get('subscriptions_prices').get('2-month')}₽\n        3 - месяц: {config_data.get('subscriptions_prices').get('3-month')}₽\n\n"
     message_text += "Выберите действие: "
 
     return (config_data, message_text)

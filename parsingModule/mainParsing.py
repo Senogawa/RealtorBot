@@ -201,7 +201,7 @@ class SmartAgentClient:
             card_dict["date"] = card["date"].get("date")
             card_dict["address_area"] = card.get("address_area")
             card_dict["address_quick"] = card.get("address_quick")
-            card_dict["description"] = card.get("description") if 'Объект имеет статус "Эксклюзивный источник"' not in card.get("description") else "Информация недоступна" #TODO убрать комментарий
+            card_dict["description"] = card.get("description") if  'Объект имеет статус "Эксклюзивный источник"' not in card.get("description") else "Информация недоступна" #TODO убрать комментарий
             card_dict["phone"] = await get_phone(card_dict.get("id"))
             try: #Проверка на доступность фото
                 if card["images"][0].get("blured"):
@@ -223,31 +223,32 @@ class SmartAgentClient:
                     try:
                         async with aiohttp.request("GET", image.get("img"), headers = {"user-agent":UserAgent().random}) as response:
                         #req = requests.get(image.get("img"), headers = {"user-agent":UserAgent().random}) #TODO maybe problems here from async
-                            req = response.status
+                            req_status = response.status
+                            req_content = await response.read()
                         await asyncio.sleep(0)
                     except requests.exceptions.ConnectionError:
-                        req.status_code = 503
+                        req_status = 503
                         break
-                    print(req.status_code)
+
                     #print(image.get("img"))
 
-                    if req.status_code == 200:
+                    if req_status == 200:
                         break
 
-                    elif req.status_code == 503:
+                    elif req_status == 503:
                         break
-                    elif req.status_code == 404:
+                    elif req_status == 404:
                         break
-                    elif req.status_code == 403:
+                    elif req_status == 403:
                         break
 
                     await asyncio.sleep(0.1) #asyncio
-                if req.status_code == 503 or req.status_code == 404 or req.status_code == 403:
+                if req_status == 503 or req_status == 404 or req_status == 403:
                     images.append("No_photo.jpg")
                     continue
                 image_name = f"{card_dict.get('id')}_{user_id}_{i}.jpg"
                 with open(f"./parsingModule/images/{card_dict.get('id')}_{user_id}_{i}.jpg", "wb") as f:
-                    f.write(req.content)
+                    f.write(req_content)
 
                 i += 1
                 images.append(image_name)

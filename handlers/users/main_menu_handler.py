@@ -30,7 +30,7 @@ async def start(message: types.Message, state: FSMContext):
 
     })
 
-    #Данные о оставшемся количестве поисков Проверка TODO 
+    #Данные о оставшемся количестве поисков Проверка TODO
     if str(message.from_id) in test_users: #TODO проверка на количество оставшихся поисков
         test_user_info = await run_command(f"SELECT * FROM test_users WHERE test_member_id='{message.from_id}'")
         test_user_info = test_user_info[0]
